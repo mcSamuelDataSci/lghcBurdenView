@@ -1,0 +1,7 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+Data/CCB/datCounty.RDS
+Data/CCB/raceDisparity.csv

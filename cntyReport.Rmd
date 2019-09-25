@@ -1,0 +1,35 @@
+---
+output:
+  word_document:
+    reference_docx: cntyReport_styles.docx
+always_allow_html: yes
+params:
+  c: NA
+---
+
+```{r setup, include=FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{r process, echo=FALSE, warning = FALSE, message=TRUE }
+#Packages.
+#application
+require(rmarkdown)
+require(knitr)
+require(shiny)
+#data
+require(dplyr)
+
+
+```
+###`r paste0(myCounty,' Measures of Health Status Snapshot',": ",DataYearBegin," to ",DataYearEnd)`
+**Report downloaded `r paste0(format(today, format="%m-%d-%Y"))`**
+
+Different measures.
+
+```{r echo=FALSE, fig.height=7, fig.width=7, warning=FALSE, , message=TRUE, dev='CairoPNG'}
+# Page 1, Layout
+
+```
+

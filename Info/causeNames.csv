@@ -1,0 +1,78 @@
+CAUSE,causeName
+0,All CAUSES
+A,"Communicable, maternal, perinatal and nutritional conditions"
+A01,Tuberculosis
+A02,HIV/ and other Sexually transmitted diseases (STDs)
+A02a,Sexually transmitted diseases (STDs) excluding HIV
+A02b,HIV/AIDS
+A04,Meningitis
+A05,Encephalitis
+A06,Hepatitis
+A06a,Acute hepatitis B
+A06b,Acute hepatitis C
+A07,Respiratory infections
+A08,Maternal conditions
+A09,Neonatal conditions
+A99,Other Infectious Diseases
+B,Cancer/Malignant neoplasms
+B01,Mouth and oropharynx cancers
+B02,Oesophagus cancer
+B03,Stomach cancer
+B04,Colon and rectum cancers
+B05,Liver cancer
+B06,Pancreas cancer
+B07,"Trachea, bronchus and lung cancers"
+B08,Melanoma and other skin cancers
+B09,Breast cancer
+B10,Uterine cancer
+B11,Ovary cancer
+B12,Prostate cancer
+B13,"Kidney, renal pelvis and ureter cancer"
+B14,Bladder cancer
+B15,Brain and nervous system cancers
+B16,Lymphomas and multiple myeloma
+B16a,Hodgkin lymphoma
+B16b,Non-Hodgkin lymphoma
+B16c,Multiple myeloma
+B17,Leukaemia
+B99,Other malignant neoplasms
+C,Cardiovascular diseases
+C01,Hypertensive heart disease
+C02,Ischaemic heart disease
+C03,Stroke
+C04,"Cardiomyopathy, myocarditis, endocarditis"
+C05,Congestive heart failure
+C99,Other or unspecified cardiovascular diseases
+D,Other Chronic
+D01,Diabetes mellitus
+D02,"Endocrine, blood, immune disorders"
+D03,Mental Health disorders
+D04,Substance use
+D04a,Alcohol use disorders
+D04b,Opioid use disorders
+D04c,Cocaine use disorders
+D04d,Amphetamine use disorders
+D05,Alzheimer’s disease and other dementias
+D06,Other neurological conditions
+D09,Digestive diseases (excluding cirrhosis)
+D10,Kidney diseases
+D10a,Acute glomerulonephritis
+D10b,Chronic kidney diesease due to diabetes
+D10c,Other chronic kidney disease
+D11,Cirrhosis of the liver
+D12,Congenital anomalies
+D66,Chronic obstructive pulmonary disease
+D67,Asthma
+D68,Other respiratory diseases
+D99,Other Chronic Conditions
+E,Injuries
+E01,Unintentional injuries
+E01a,Road injury
+E01b,Falls
+E01x,Other unintentional injuries
+E02,Suicide/Self-harm
+E03,Homicide/Interpersonal violence
+Z,Unknown/Missing Value
+Z01,"Symptoms, signs and ill-defined conditions, not elsewhere classified"
+Z02,Unknown/Missing Value
+Z03,Code does not map
