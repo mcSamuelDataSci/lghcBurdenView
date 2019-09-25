@@ -18,16 +18,21 @@ shinyServer(function(input, output,session) {
   
   
   output$datasource  <- renderUI({
-    Tit1 <- paste("Data Sources")
-    Cit1 <- paste("1. Number of Deaths, Years of Life Lost, Percent Increase, and Disparity Ratio:
+    Tit1    <- paste("Data Sources")
+    Cit1    <- paste("1. Number of Deaths, Years of Life Lost, Percent Increase, and Disparity Ratio:
                  Fusion Center analysis prepared using CDPH Vital Statistics Death Data Files;
-                 2007-2017. www.cdph.ca.gov/Programs/CHSI/Pages/Data-and-Statistics-.aspx")
-    Cit2 <- paste("2. Years Lived with Disability: Institute for Health metrics and Evaluation (IHME).
+                 2007-2017.")
+    Cit1url <- tagList("www.cdph.ca.gov/Programs/CHSI/Pages/Data-and-Statistics-.aspx",
+                       a("CHSI Data and Statistics",
+                         href="www.cdph.ca.gov/Programs/CHSI/Pages/Data-and-Statistics-.aspx"))
+    Cit2    <- paste("2. Years Lived with Disability: Institute for Health metrics and Evaluation (IHME).
                 GBD Compare. Seattle, WA: IHME, University of Washington, 2015. vizhub.healthdata.
                 org/gbdcompare")
-    Cit3 <- paste("3. Infectious Disease: Center for Infectious Diseases, California Department of
+    Cit2hov <- tagList("This text shows",
+                       a("This is the hover tag"))
+    Cit3    <- paste("3. Infectious Disease: Center for Infectious Diseases, California Department of
                  Public Health. www.cdph.ca.gov/Programs/CID/Pages/CID")
-    HTML(paste(Tit1,Cit1,Cit2,Cit3,sep= '<br/>'))
+    HTML(paste(Tit1,Cit1,Cit1url,Cit2,Cit3,sep= '<br/>'))
   })
   
   # output$summary  <- renderUI({
