@@ -32,7 +32,7 @@ shinyServer(function(input, output,session) {
                        a("This is the hover tag"))
     Cit3    <- paste("3. Infectious Disease: Center for Infectious Diseases, California Department of
                  Public Health. www.cdph.ca.gov/Programs/CID/Pages/CID")
-    HTML(paste(Tit1,Cit1,Cit1url,Cit2,Cit3,sep= '<br/>'))
+    HTML(paste(Tit1,Cit1,Cit1url,Cit2,Cit2hov,Cit3,sep= '<br/>'))
   })
   
   # output$summary  <- renderUI({
