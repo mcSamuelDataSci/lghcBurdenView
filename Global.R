@@ -24,7 +24,9 @@ myN       <-  10
 
 
 causeNames  <- read_csv("Info/causeNames.csv")  %>%
-                   mutate(causeName=ifelse(CAUSE=="D05","Alzheimers",causeName))
+                   mutate(causeName = ifelse(CAUSE=="D05","Alzheimers",causeName),
+                          causeName = ifelse(CAUSE=="Z01","Ill-Defined",causeName))
+
 
 ccb         <- filter(ccbData,year==myYear,Level=="lev2", sex==mySex) %>%
                left_join(causeNames,by="CAUSE") 
@@ -47,13 +49,15 @@ ccbChange      <- ccbChange %>%
                   filter(CAUSE != "Z01" ) %>%  #   Symptoms, signs and ill-defined conditions, not elsewhere classified
                   left_join(causeNames,by="CAUSE") %>%
                   mutate(measure=change,
-                         mValues = causeName)
+                         mValues = causeName) %>%
+                  mutate(mValues = ifelse(measure < 0,"",mValues))
 
 
 # --CCB RACE DATA ---------------------------------------------------
 
 
 ccbRace     <- read_csv(paste0(myPlace,"/Data/CCB/raceDisparity.csv")) %>%
+                  mutate(causeName = ifelse(CAUSE=="Z01","Ill-Defined",causeName)) %>%
                  mutate(measure=round(rateRatio,1),
                         mValues = causeName)
 
@@ -162,13 +166,22 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles"){
    if(IDnum %in% 6:7)  work.dat  <-        dataSets[[IDnum]]                 
    
    
-   work.dat <- work.dat %>%
-         mutate(rankX = rank(-measure),
-                xValues = paste(rankX,mValues)) %>%
-         filter(rankX <= SHOW_TOP)
+  # test <- data.frame(xrow=1:15)
 
    
-   if (IDnum == 4) work.dat <- mutate(work.dat,xValues=paste0(xValues,"      (",raceCode,":",lowRace,")"))
+   work.dat <- work.dat %>%
+         mutate(rankX = rank(-measure),
+                xValues = paste(mValues),
+                xrow = row_number()) %>%
+    #            xValues = paste(rankX,mValues)) %>%   # INCLUDES RANKING number
+           filter(rankX <= SHOW_TOP)    # %>%
+              #    full_join(test,by="xrow")       
+    
+   
+   
+   
+   # if (IDnum == 4) work.dat <- mutate(work.dat,xValues=paste0(xValues,"      (",raceCode,":",lowRace,")"))
+   if (IDnum == 4) work.dat <- mutate(work.dat,xRaceValue=paste0("(",raceCode,":",lowRace,")"))
    if (IDnum == 4) myYear <- "2016-2018"
    if (IDnum == 3) myYear <- "2007 to 2017"
    
@@ -178,7 +191,7 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles"){
  plot_width <- max(work.dat$measure)*PLOT_WIDTH_MULTIPLIER
 
 
- 
+tPlot <-  
 ggplot(data=work.dat, aes(x=reorder(xValues, measure),y=measure)) +
 coord_flip() +
   geom_bar(position="dodge", stat="identity", width=BAR_WIDTH, fill=ourColors[IDnum]) +
@@ -201,6 +214,12 @@ coord_flip() +
         scale_y_continuous(expand = c(0,0), limits = c(0, plot_width))
 
 
+
+if (IDnum == 4) {
+  tPlot <- tPlot + geom_text(hjust=0, aes(x=xValues,y=plot_width*.8, label=paste0(xRaceValue)),size=2.5)
+}
+    
+tPlot
 
 }
    
