@@ -21,10 +21,13 @@ shinyUI(fluidPage(
     htmlOutput("mainTitle"),
     fluidRow(
         #column(4, plotOutput("DEATHS1"),offset = 2 ),
-        column(3, id="deathTest",plotOutput("DEATHS1")),
-        column(3, plotOutput("YLL1")),
-        column(3, plotOutput("CHANGE1")),
-        column(3, plotOutput("DISPARITY1"))
+        column(6, id="deathTest",plotOutput("DEATHS1")),
+        column(6, plotOutput("YLL1"))),
+        
+        fluidRow(   
+        
+        column(6, plotOutput("CHANGE1")),
+        column(6, plotOutput("DISPARITY1"))
     ) ,
     
     # fluidRow(
@@ -38,9 +41,9 @@ shinyUI(fluidPage(
     # ) ,
     
     fluidRow(
-           column(3, plotOutput("CASES1"),offset = 1),
-           column(3, plotOutput("YLD1")),
-           column(3, plotOutput("RISK1"))  
+           column(4, plotOutput("CASES1")) , # ,offset = 1
+           column(4, plotOutput("YLD1")),
+           column(4, plotOutput("RISK1"))  
     ),
     
     fluidRow(

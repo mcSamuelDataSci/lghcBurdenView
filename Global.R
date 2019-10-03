@@ -24,7 +24,9 @@ myN       <-  10
 
 
 causeNames  <- read_csv("Info/causeNames.csv")  %>%
-                   mutate(causeName=ifelse(CAUSE=="D05","Alzheimers",causeName))
+                   mutate(causeName = ifelse(CAUSE=="D05","Alzheimers",causeName),
+                          causeName = ifelse(CAUSE=="Z01","Ill-Defined",causeName))
+
 
 ccb         <- filter(ccbData,year==myYear,Level=="lev2", sex==mySex) %>%
                left_join(causeNames,by="CAUSE") 
@@ -47,13 +49,15 @@ ccbChange      <- ccbChange %>%
                   filter(CAUSE != "Z01" ) %>%  #   Symptoms, signs and ill-defined conditions, not elsewhere classified
                   left_join(causeNames,by="CAUSE") %>%
                   mutate(measure=change,
-                         mValues = causeName)
+                         mValues = causeName) %>%
+                  mutate(mValues = ifelse(measure < 0,NA,mValues))
 
 
 # --CCB RACE DATA ---------------------------------------------------
 
 
 ccbRace     <- read_csv(paste0(myPlace,"/Data/CCB/raceDisparity.csv")) %>%
+                  mutate(causeName = ifelse(CAUSE=="Z01","Ill-Defined",causeName)) %>%
                  mutate(measure=round(rateRatio,1),
                         mValues = causeName)
 
@@ -153,22 +157,37 @@ ourColors <- a3[c(5,6,7,8,9,11,12)]
 plotMeasures <- function(IDnum, myCounty = "Los Angeles"){ 
     
   if (1==2) {
-    myDataSet <- ccbRace
-    IDnum <- 3
-    myCounty <- "Contra Costa"
+    myDataSet <- cidData
+    IDnum <- 5
+    myCounty <- "Humboldt"
   }
      
    if(IDnum %in% 1:5)  work.dat  <- filter(dataSets[[IDnum]],county==myCounty)
    if(IDnum %in% 6:7)  work.dat  <-        dataSets[[IDnum]]                 
    
    
-   work.dat <- work.dat %>%
-         mutate(rankX = rank(-measure),
-                xValues = paste(rankX,mValues)) %>%
-         filter(rankX <= SHOW_TOP)
+  test <- data.frame(xrow=1:15)
 
    
-   if (IDnum == 4) work.dat <- mutate(work.dat,xValues=paste0(xValues,"      (",raceCode,":",lowRace,")"))
+   work.dat <- work.dat %>%
+              mutate(rankX = rank(-measure)) %>%
+              filter(rankX <= SHOW_TOP)   %>%
+              arrange(rankX) %>%
+              mutate(xrow = row_number()  ) %>%
+              full_join(test,by="xrow")    %>%
+              mutate(xValues = ifelse(is.na(mValues),xrow,paste(xrow,mValues)))  %>%
+              mutate(xSize1 =ifelse(is.na(mValues),0.01,5),
+                     xSize2 =ifelse(is.na(mValues),0.01,3),
+                     xSize3 =ifelse(is.na(mValues),0.01,2.5),
+                     )  %>%
+              mutate(measure=ifelse(is.na(mValues),0,measure))  %>%
+     
+                 arrange(xrow)
+               
+              
+   
+   # if (IDnum == 4) work.dat <- mutate(work.dat,xValues=paste0(xValues,"      (",raceCode,":",lowRace,")"))
+   if (IDnum == 4) work.dat <- mutate(work.dat,xRaceValue=paste0("(",raceCode,":",lowRace,")"))
    if (IDnum == 4) myYear <- "2016-2018"
    if (IDnum == 3) myYear <- "2007 to 2017"
    
@@ -178,12 +197,14 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles"){
  plot_width <- max(work.dat$measure)*PLOT_WIDTH_MULTIPLIER
 
 
- 
-ggplot(data=work.dat, aes(x=reorder(xValues, measure),y=measure)) +
+ tPlot <-  
+#ggplot(data=work.dat, aes(x=xValues,y=measure)) +
+ggplot(data=work.dat, aes(x=reorder(xValues, -xrow),y=measure)) +
 coord_flip() +
   geom_bar(position="dodge", stat="identity", width=BAR_WIDTH, fill=ourColors[IDnum]) +
-  geom_text(hjust=0, aes(x=xValues,y=0, label=paste0(xValues))) + 
-  annotate(geom="text", hjust=1, x=work.dat$xValues, y=plot_width, label=work.dat$measure) +
+  geom_text(hjust=0, y=0, label=paste0(work.dat$xValues),size=work.dat$xSize1) +  # , size=xSize
+  #geom_text(hjust=0, aes(x=xValues,y=0, label=paste0(xValues),size=xSize)) +  # , size=xSize
+     annotate(geom="text", hjust=1, x=work.dat$xValues, y=plot_width, label=work.dat$measure,size=work.dat$xSize2) +
          theme(panel.grid.major=element_blank(),
          panel.grid.minor=element_blank(),
          panel.background=element_blank(),
@@ -193,6 +214,7 @@ coord_flip() +
          axis.title.y=element_blank(),
          axis.text.y=element_blank(),
          axis.ticks.y=element_blank(),
+         legend.position="none",
         # panel.border = element_rect(colour = "gray", fill=NA, size=1),
          plot.title=element_text(size=16, face="bold", vjust=-4),
          plot.subtitle=element_text(size=10, face="bold", hjust=1, vjust=-2)
@@ -201,6 +223,12 @@ coord_flip() +
         scale_y_continuous(expand = c(0,0), limits = c(0, plot_width))
 
 
+
+if (IDnum == 4) {
+  tPlot <- tPlot + geom_text(hjust=0, aes(x=xValues,y=plot_width*.7, label=paste0(xRaceValue)),size=work.dat$xSize3)
+}
+    
+tPlot
 
 }
    
