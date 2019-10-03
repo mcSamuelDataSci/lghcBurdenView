@@ -3,6 +3,7 @@ library(dplyr)
 library(readr)
 library(ggplot2)
 library(shiny)
+library(shinyBS)
 library(magrittr)
 library(tidyr)
 library(plotly)
@@ -110,9 +111,9 @@ plot_title <- c("Deaths",
                 "Years of Life Lost",
                 "Increase in Deaths",
                 "Race Disparity in Deaths",
-                "Reporable Disease Cases",
+                "Reportable Disease Cases",
                 "Years Lived with Disability",
-                "Risk Factors")
+                "Risk Factors (State Only)")
 
 metric <-     c("Number",
                 "Rate",
@@ -235,4 +236,16 @@ tPlot
    
 # plotMeasures(3, myCounty = "Contra Costa") 
 
+# --APP General Text ------------------------------------------------------
+#tooltips and popovers https://rdrr.io/cran/shinyBS/man/Tooltips_and_Popovers.html
+
+AppText<-function(Tbl=Datasources,TblRw=1) {list(
+  HTML(paste(Tbl[TblRw,1],Tbl[TblRw,2],Tbl[TblRw,3],tagList(a(Tbl[TblRw,4],href=Tbl[TblRw,5],target="_blank")) )),
+  if(Tbl[TblRw,6]!=""){
+    tags$span(tipify(bsButton(paste0("pB",deparse(substitute(Tbl)),TblRw),Tbl[TblRw,6],size="extra-small"),Tbl[TblRw,7],placement = "top"))
+  }
+)}
+
+DataSourceText  <- read.csv(paste0(myPlace,"/Info/DataSourceText.csv"), colClasses = "character",na.strings = "NA")
+SummaryText     <- read.csv(paste0(myPlace,"/Info/SummaryText.csv"),    colClasses = "character",na.strings = "NA")
 

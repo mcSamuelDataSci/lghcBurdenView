@@ -50,7 +50,9 @@ shinyUI(fluidPage(
         column(12,div(style="height:50px;"))
     ),
     fluidRow(
-        column(12,htmlOutput("datasource"))
+        column(1),
+        column(10,uiOutput("datasource")),
+        column(1)
     ),
     fluidRow(
         column(12,div(style="height:50px;"))
@@ -59,13 +61,13 @@ shinyUI(fluidPage(
         column(12,div(style="height:30px;background-color: #006f91;"))
     ),
     fluidRow(
-        column(12,div(style="height:100px;"))
+        column(12,div(style="height:50px;"))
     ),
-    # fluidRow(
-    #     column(1),
-    #     column(10,textOutput("summary")),
-    #     column(1)
-    # ),
+    fluidRow(
+        column(1),
+        column(10,uiOutput("summary")),
+        column(1)
+    ),
     fluidRow(
         column(12,div(style="height:50px;"))
     ),
@@ -74,6 +76,6 @@ shinyUI(fluidPage(
     ),
     
     shinyjs::useShinyjs()
-    )
+)
 )    
 

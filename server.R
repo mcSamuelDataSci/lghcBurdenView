@@ -17,36 +17,33 @@ shinyServer(function(input, output,session) {
     HTML(paste0("Measures for ",input$myCounty," in 2017"))))})
   
   
-  output$datasource  <- renderUI({
-    Tit1    <- paste("Data Sources")
-    Cit1    <- paste("1. Number of Deaths, Years of Life Lost, Percent Increase, and Disparity Ratio:
-                 Fusion Center analysis prepared using CDPH Vital Statistics Death Data Files;
-                 2007-2017.")
-    Cit1url <- tagList("www.cdph.ca.gov/Programs/CHSI/Pages/Data-and-Statistics-.aspx",
-                       a("CHSI Data and Statistics",
-                         href="www.cdph.ca.gov/Programs/CHSI/Pages/Data-and-Statistics-.aspx"))
-    Cit2    <- paste("2. Years Lived with Disability: Institute for Health metrics and Evaluation (IHME).
-                GBD Compare. Seattle, WA: IHME, University of Washington, 2015. vizhub.healthdata.
-                org/gbdcompare")
-    Cit2hov <- tagList("This text shows",
-                       a("This is the hover tag"))
-    Cit3    <- paste("3. Infectious Disease: Center for Infectious Diseases, California Department of
-                 Public Health. www.cdph.ca.gov/Programs/CID/Pages/CID")
-    HTML(paste(Tit1,Cit1,Cit1url,Cit2,Cit2hov,Cit3,sep= '<br/>'))
+  output$datasource  <- renderUI({ tags$span(
+    AppText(DataSourceText,1),
+    AppText(DataSourceText,2),
+    AppText(DataSourceText,3),
+    AppText(DataSourceText,4))
   })
   
-  # output$summary  <- renderUI({
-  #   Tit1 <- paste("Summary")
-  #   Cit1 <- paste("1. Number of Deaths, Years of Life Lost, Percent Increase, and Disparity Ratio:
-  #                Fusion Center analysis prepared using CDPH Vital Statistics Death Data Files;
-  #                2007-2017. www.cdph.ca.gov/Programs/CHSI/Pages/Data-and-Statistics-.aspx")
-  #   Cit2 <- paste("2. Years Lived with Disability: Institute for Health metrics and Evaluation (IHME).
-  #               GBD Compare. Seattle, WA: IHME, University of Washington, 2015. vizhub.healthdata.
-  #               org/gbdcompare")
-  #   Cit3 <- paste("3. Infectious Disease: Center for Infectious Diseases, California Department of
-  #                Public Health. www.cdph.ca.gov/Programs/CID/Pages/CID")
-  #   HTML(paste(Tit1,Cit1,Cit2,Cit3,sep= '<br/>'))
-  # })
+  output$summary  <- renderUI({
+    list(
+      AppText(SummaryText,1),
+      AppText(SummaryText,2),
+      AppText(SummaryText,3),
+      AppText(SummaryText,4),
+      AppText(SummaryText,5),
+      AppText(SummaryText,6),
+      AppText(SummaryText,7),
+      AppText(SummaryText,8),
+      AppText(SummaryText,9),
+      AppText(SummaryText,10),
+      AppText(SummaryText,11),
+      AppText(SummaryText,12),
+      AppText(SummaryText,13),
+      AppText(SummaryText,14),
+      AppText(SummaryText,15),
+      AppText(SummaryText,16)
+    )
+  })
   
   shinyjs::onclick("deathTest",    showModal(modalDialog(HTML("test"),
                                                          easyClose = TRUE,
@@ -55,28 +52,32 @@ shinyServer(function(input, output,session) {
   
   
   output$report <- downloadHandler(
-
+    
     filename = paste0("County_Snapshot_Report_",Sys.Date(),".docx"),
     content = function(file) {
-      tempReport <- file.path(tempdir(), "cntyReport.Rmd")
-      file.copy("cntyReport.Rmd", tempReport, overwrite = TRUE)
+      tempReport <- file.path(getwd(), "cntyReport.Rmd")
+      #file.copy("cntyReport.Rmd", tempReport, overwrite = TRUE)
       
-      tempStyle <- file.path(tempdir(), "cntyReport_styles.docx")
-      file.copy("cntyReport_styles.docx", tempStyle, overwrite = TRUE)
-
+      tempStyle <- file.path(getwd(), "cntyReport_styles.docx")
+      #file.copy("cntyReport_styles.docx", tempStyle, overwrite = TRUE)
+      
       # Set up parameters to pass to Rmd document
       #params <- list(c = input$county2)
-
+      
       # Knit the document, passing in the `params` list, and eval it in a
       # child of the global environment (this isolates the code in the document
       # from the code in this app).
       rmarkdown::render(tempReport,
-                        #word_document(reference_docx = "cntyReport_styles.docx"),
-                        output_file = file,
+                        word_document(reference_docx = "cntyReport_styles.docx"),
+                        output_file = filename,
                         #params = params,
                         envir = new.env(parent = globalenv())
       )
     }
   )
-
+  
 })
+
+
+#rmarkdown::render(tempReport,
+#                  envir = new.env(parent = globalenv()) )
