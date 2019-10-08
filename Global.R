@@ -13,12 +13,15 @@ myPlace <- getwd()
 
 # --CCB DEATH DATA ------------------------------------------------
 
-ccbData     <- readRDS(paste0(myPlace,"/Data/CCB/datCounty.RDS")) 
+ccbData     <- readRDS(paste0(myPlace,"/Data/CCB/datCounty.RDS")) %>%
+                   filter(                                       Level %in% c("lev2") )
+                #   filter(!(CAUSE %in% c("A02","D04","E03") ) & Level %in% c("lev2","lev3") )
+
 
 #myMeasure <-  "Ndeaths"
 myYear    <-  2017
 mySex     <-  "Total"
-myLev     <-  "lev2"
+#myLev     <-  "lev2"
 myN       <-  10
 
 
@@ -29,8 +32,10 @@ causeNames  <- read_csv("Info/causeNames.csv")  %>%
                           causeName = ifelse(CAUSE=="Z01","Ill-Defined",causeName))
 
 
-ccb         <- filter(ccbData,year==myYear,Level=="lev2", sex==mySex) %>%
+ccb         <- filter(ccbData,year==myYear,sex==mySex) %>%
                left_join(causeNames,by="CAUSE") 
+
+
 
 ccbDeaths   <- ccb %>%
                 mutate(measure=Ndeaths,
@@ -41,7 +46,7 @@ ccbYLL      <- ccb %>%
                mValues = causeName)
 
 
-ccbChange      <- filter(ccbData,year %in% c(2007,2017), Level=="lev2", sex==mySex) %>% 
+ccbChange      <- filter(ccbData,year %in% c(2007,2017), sex==mySex) %>% 
                 select(county,year,CAUSE,aRate) %>%
                 spread(key=year,value=aRate) 
 names(ccbChange)      <- c(names(ccbChange)[1:2],     paste0("rate",names(ccbChange)[3:4]))
@@ -103,8 +108,8 @@ dat.DALY.risk <- dataIHME %>%  filter(measure_id ==  2,    #YLD
 
 countyList  <- sort(as.character(unique(ccbData$county)))
 
-SHOW_TOP <- 15
-BAR_WIDTH <- 0.9
+SHOW_TOP <- 5  #15
+BAR_WIDTH <-  0.9
 PLOT_WIDTH_MULTIPLIER <- 1.0
 
 plot_title <- c("Deaths",
@@ -167,7 +172,7 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles"){
    if(IDnum %in% 6:7)  work.dat  <-        dataSets[[IDnum]]                 
    
    
-  test <- data.frame(xrow=1:15)
+  test <- data.frame(xrow=1:SHOW_TOP)
 
    
    work.dat <- work.dat %>%
@@ -177,9 +182,9 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles"){
               mutate(xrow = row_number()  ) %>%
               full_join(test,by="xrow")    %>%
               mutate(xValues = ifelse(is.na(mValues),xrow,paste(xrow,mValues)))  %>%
-              mutate(xSize1 =ifelse(is.na(mValues),0.01,5),
-                     xSize2 =ifelse(is.na(mValues),0.01,3),
-                     xSize3 =ifelse(is.na(mValues),0.01,2.5),
+              mutate(xSize1 =ifelse(is.na(mValues),0.01,8),   #5
+                     xSize2 =ifelse(is.na(mValues),0.01,5),   #3
+                     xSize3 =ifelse(is.na(mValues),0.01,5),   #2.5
                      )  %>%
               mutate(measure=ifelse(is.na(mValues),0,measure))  %>%
      
@@ -199,13 +204,11 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles"){
 
 
  tPlot <-  
-#ggplot(data=work.dat, aes(x=xValues,y=measure)) +
-ggplot(data=work.dat, aes(x=reorder(xValues, -xrow),y=measure)) +
-coord_flip() +
-  geom_bar(position="dodge", stat="identity", width=BAR_WIDTH, fill=ourColors[IDnum]) +
-  geom_text(hjust=0, y=0, label=paste0(work.dat$xValues),size=work.dat$xSize1) +  # , size=xSize
-  #geom_text(hjust=0, aes(x=xValues,y=0, label=paste0(xValues),size=xSize)) +  # , size=xSize
-     annotate(geom="text", hjust=1, x=work.dat$xValues, y=plot_width, label=work.dat$measure,size=work.dat$xSize2) +
+         ggplot(data=work.dat, aes(x=reorder(xValues, -xrow),y=measure)) +
+         coord_flip() +
+         geom_bar(position="dodge", stat="identity", width=BAR_WIDTH, fill=ourColors[IDnum]) +
+         geom_text(hjust=0, y=0, label=paste0(work.dat$xValues),size=work.dat$xSize1) +  # , size=xSize
+         annotate(geom="text", hjust=1, x=work.dat$xValues, y=plot_width, label=work.dat$measure,size=work.dat$xSize2) +
          theme(panel.grid.major=element_blank(),
          panel.grid.minor=element_blank(),
          panel.background=element_blank(),
@@ -217,11 +220,11 @@ coord_flip() +
          axis.ticks.y=element_blank(),
          legend.position="none",
         # panel.border = element_rect(colour = "gray", fill=NA, size=1),
-         plot.title=element_text(size=16, face="bold", vjust=-4),
-         plot.subtitle=element_text(size=10, face="bold", hjust=1, vjust=-2)
+         plot.title=element_text(size=20, face="bold", vjust=-4),                 # size units?
+         plot.subtitle=element_text(size=16, face="bold", hjust=1, vjust=-2)
          ) +
          labs(title=paste(plot_title[IDnum]), subtitle=metric[IDnum])  +
-        scale_y_continuous(expand = c(0,0), limits = c(0, plot_width))
+         scale_y_continuous(expand = c(0,0), limits = c(0, plot_width))
 
 
 
