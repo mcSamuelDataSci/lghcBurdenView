@@ -24,13 +24,11 @@ mySex     <-  "Total"
 #myLev     <-  "lev2"
 myN       <-  10
 
-
-
 dMode <- "display"
-dMode <- "study"
+#dMode <- "study"
 
 if (dMode == "display") {
-   SHOW_TOP <- 5  #15
+   SHOW_TOP <- 5  
    tSize1   <- 8
    tSize2   <- 5
    tSize3   <- 5
