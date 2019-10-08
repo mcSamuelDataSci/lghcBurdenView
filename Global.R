@@ -26,6 +26,24 @@ myN       <-  10
 
 
 
+dMode <- "display"
+dMode <- "study"
+
+if (dMode == "display") {
+   SHOW_TOP <- 5  #15
+   tSize1   <- 8
+   tSize2   <- 5
+   tSize3   <- 5
+}
+   
+if (dMode == "study") {
+  SHOW_TOP <- 15
+  tSize1   <- 5
+  tSize2   <- 3
+  tSize3   <- 2.5
+}   
+   
+
 
 causeNames  <- read_csv("Info/causeNames.csv")  %>%
                    mutate(causeName = ifelse(CAUSE=="D05","Alzheimers",causeName),
@@ -108,7 +126,7 @@ dat.DALY.risk <- dataIHME %>%  filter(measure_id ==  2,    #YLD
 
 countyList  <- sort(as.character(unique(ccbData$county)))
 
-SHOW_TOP <- 5  #15
+
 BAR_WIDTH <-  0.9
 PLOT_WIDTH_MULTIPLIER <- 1.0
 
@@ -117,7 +135,7 @@ plot_title <- c("Deaths",
                 "Increase in Deaths",
                 "Race Disparity in Deaths",
                 "Reportable Disease Cases",
-                "Years Lived with Disability",
+                "Years Lived with Disability (State Only)",
                 "Risk Factors (State Only)")
 
 metric <-     c("Number",
@@ -148,18 +166,9 @@ a3 <- hcl(hue, 35, 85)
 
 ourColors <- a3[c(5,6,7,8,9,11,12)]
 
-
-
-# THIS approach does not work for now
-# measures <- c("Ndeaths","junk")
-# mNames   <- c("causeName")
-# mutate(rankX = rank(-measures[IDnum])) %>%
-  
-  
 # --APP Plot Function-----------------------------------------------
 
 
-#plotMeasures <- function(myDataSet, IDnum, myCounty = "Los Angeles"){ 
 plotMeasures <- function(IDnum, myCounty = "Los Angeles"){ 
     
   if (1==2) {
@@ -182,9 +191,9 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles"){
               mutate(xrow = row_number()  ) %>%
               full_join(test,by="xrow")    %>%
               mutate(xValues = ifelse(is.na(mValues),xrow,paste(xrow,mValues)))  %>%
-              mutate(xSize1 =ifelse(is.na(mValues),0.01,8),   #5
-                     xSize2 =ifelse(is.na(mValues),0.01,5),   #3
-                     xSize3 =ifelse(is.na(mValues),0.01,5),   #2.5
+              mutate(xSize1 =ifelse(is.na(mValues),0.01,tSize1),   #5
+                     xSize2 =ifelse(is.na(mValues),0.01,tSize2),   #3
+                     xSize3 =ifelse(is.na(mValues),0.01,tSize3),   #2.5
                      )  %>%
               mutate(measure=ifelse(is.na(mValues),0,measure))  %>%
      
