@@ -40,10 +40,15 @@ shinyUI(fluidPage(
     #     column(6, plotOutput("DISPARITY1"))
     # ) ,
     
+    
     fluidRow(
-           column(4, plotOutput("CASES1")) , # ,offset = 1
-           column(4, plotOutput("YLD1")),
-           column(4, plotOutput("RISK1"))  
+        column(6, plotOutput("HOSP1")) , # ,offset = 1
+        column(6, plotOutput("CASES1"))  
+    ),
+    
+    fluidRow(
+           column(6, plotOutput("YLD1")),
+           column(6, plotOutput("RISK1"))  
     ),
     
     fluidRow(

@@ -7,10 +7,11 @@ shinyServer(function(input, output,session) {
   output$CHANGE1     <- renderPlot({plotMeasures(IDnum=3,input$myCounty)})
   output$DISPARITY1  <- renderPlot({plotMeasures(IDnum=4,input$myCounty)})
   
-  output$CASES1      <- renderPlot({plotMeasures(IDnum=5,input$myCounty)})
+  output$HOSP1        <- renderPlot({plotMeasures(IDnum=5,input$myCounty)})
+  output$CASES1      <- renderPlot({plotMeasures(IDnum=6,input$myCounty)})
 
-  output$YLD1        <- renderPlot({plotMeasures(IDnum=6,input$myCounty)})
-  output$RISK1       <- renderPlot({plotMeasures(IDnum=7,input$myCounty)})
+  output$YLD1        <- renderPlot({plotMeasures(IDnum=7,input$myCounty)})
+  output$RISK1       <- renderPlot({plotMeasures(IDnum=8,input$myCounty)})
   
   
   output$mainTitle <- renderUI({h3(strong(

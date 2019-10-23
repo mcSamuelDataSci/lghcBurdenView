@@ -11,18 +11,14 @@ library(shinyjs)
 
 myPlace <- getwd()
 
-# --CCB DEATH DATA ------------------------------------------------
-
-ccbData     <- readRDS(paste0(myPlace,"/Data/CCB/datCounty.RDS")) %>%
-                   filter(                                       Level %in% c("lev2") )
-                #   filter(!(CAUSE %in% c("A02","D04","E03") ) & Level %in% c("lev2","lev3") )
+# --Global constants and settings-----------------------------------
 
 
 #myMeasure <-  "Ndeaths"
 myYear    <-  2017
 mySex     <-  "Total"
 #myLev     <-  "lev2"
-myN       <-  10
+
 
 dMode <- "display"
 #dMode <- "study"
@@ -40,7 +36,15 @@ if (dMode == "study") {
   tSize2   <- 3
   tSize3   <- 2.5
 }   
+
+
+# --CCB DEATH DATA ------------------------------------------------
+
+
    
+ccbData     <- readRDS(paste0(myPlace,"/Data/CCB/datCounty.RDS")) %>%
+  filter(                                       Level %in% c("lev2") )
+#   filter(!(CAUSE %in% c("A02","D04","E03") ) & Level %in% c("lev2","lev3") )
 
 
 causeNames  <- read_csv("Info/causeNames.csv")  %>%
@@ -92,6 +96,15 @@ cidData     <- filter(cidData,Year==myYear) %>%
                         measure=Cases,
                         mValues = Disease)
 
+# -- HOSPITALZATION DATA DATA -----------------------------------------------
+
+hospData <- read_csv(paste0(myPlace,"/Data/OSHPD/Hospital_Discharge_CCS_grouping_2016.csv"))  %>%
+                       mutate(county = countyName,
+                       measure=nHosp,
+                       mValues = ccsName)
+  
+
+
 # -- IMHE DATA -----------------------------------------------
 
 myLevel <- c(2,3)
@@ -132,6 +145,7 @@ plot_title <- c("Deaths",
                 "Years of Life Lost",
                 "Increase in Deaths",
                 "Race Disparity in Deaths",
+                "Number of Hospitalizations",
                 "Reportable Disease Cases",
                 "Years Lived with Disability (State Only)",
                 "Risk Factors (State Only)")
@@ -141,11 +155,12 @@ metric <-     c("Number",
                 "Percent",
                 "Rate Ratio",
                 "Number",
+                "Number",
                 "Rate",
                 "Rate")
 
-dataSets   <- list(ccbDeaths, ccbYLL,ccbChange, ccbRace,cidData, dat.YLD.cause,dat.DALY.risk)
-ourColors <-    c("#8F98B5", "#E9A291", "#E9A291","#8ECAE3", "#E6C8A0","#8F98B5","#E9A291")
+dataSets   <- list(ccbDeaths, ccbYLL,ccbChange, ccbRace,hospData,cidData, dat.YLD.cause,dat.DALY.risk)
+ourColors <-    c("#8F98B5", "#E9A291", "#E9A291","#8ECAE3", "#E6C8A0","#8F98B5","#E9A291","#8F98B5")
 
 
 
@@ -162,7 +177,7 @@ a3 <- hcl(hue, 35, 85)
 
 #barplot(seq_along(a), col=a3, main="Pastel_hcl")
 
-ourColors <- a3[c(5,6,7,8,9,11,12)]
+ourColors <- a3[c(5,6,7,8,9,11,12,15)]
 
 # --APP Plot Function-----------------------------------------------
 
@@ -175,8 +190,8 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles"){
     myCounty <- "Humboldt"
   }
      
-   if(IDnum %in% 1:5)  work.dat  <- filter(dataSets[[IDnum]],county==myCounty)
-   if(IDnum %in% 6:7)  work.dat  <-        dataSets[[IDnum]]                 
+   if(IDnum %in% 1:6)  work.dat  <- filter(dataSets[[IDnum]],county==myCounty)
+   if(IDnum %in% 7:8)  work.dat  <-        dataSets[[IDnum]]                 
    
    
   test <- data.frame(xrow=1:SHOW_TOP)
