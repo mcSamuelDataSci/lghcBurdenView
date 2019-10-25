@@ -52,6 +52,7 @@ shinyUI(fluidPage(
     #     column(1)
     # ),
     # fluidRow(
+<<<<<<< HEAD
     #     column(12,div(style="height:50px;"))
     # ),
     # fluidRow(
@@ -71,5 +72,50 @@ shinyUI(fluidPage(
     # fluidRow(
     #     column(12,div(style="height:30px;background-color: #006f91;"))
     # )
+=======
+    #     column(6, plotOutput("CHANGE1")),
+    #     column(6, plotOutput("DISPARITY1"))
+    # ) ,
+    
+    
+    fluidRow(
+        column(6, plotOutput("HOSP1")) , # ,offset = 1
+        column(6, plotOutput("CASES1"))  
+    ),
+    
+    fluidRow(
+           column(6, plotOutput("YLD1")),
+           column(6, plotOutput("RISK1"))  
+    ),
+    
+    fluidRow(
+        column(12,div(style="height:50px;"))
+    ),
+    fluidRow(
+        column(1),
+        column(10,uiOutput("datasource")),
+        column(1)
+    ),
+    fluidRow(
+        column(12,div(style="height:50px;"))
+    ),
+    fluidRow(
+        column(12,div(style="height:30px;background-color: #006f91;"))
+    ),
+    fluidRow(
+        column(12,div(style="height:50px;"))
+    ),
+    fluidRow(
+        column(1),
+        column(10,uiOutput("summary")),
+        column(1)
+    ),
+    fluidRow(
+        column(12,div(style="height:50px;"))
+    ),
+    fluidRow(
+        column(12,div(style="height:30px;background-color: #006f91;"))
+    ),
+>>>>>>> c99f0b483ba4aa22315e0e9f8448edb770360d25
     
 ))

@@ -11,20 +11,40 @@ library(shinyjs)
 
 myPlace <- getwd()
 
-# --CCB DEATH DATA ------------------------------------------------
-
-ccbData     <- readRDS(paste0(myPlace,"/Data/CCB/datCounty.RDS")) %>%
-                   filter(                                       Level %in% c("lev2") )
-                #   filter(!(CAUSE %in% c("A02","D04","E03") ) & Level %in% c("lev2","lev3") )
+# --Global constants and settings-----------------------------------
 
 
 #myMeasure <-  "Ndeaths"
 myYear    <-  2017
 mySex     <-  "Total"
 #myLev     <-  "lev2"
-myN       <-  10
 
 
+dMode <- "display"
+#dMode <- "study"
+
+if (dMode == "display") {
+   SHOW_TOP <- 5  
+   tSize1   <- 8
+   tSize2   <- 5
+   tSize3   <- 5
+}
+   
+if (dMode == "study") {
+  SHOW_TOP <- 15
+  tSize1   <- 5
+  tSize2   <- 3
+  tSize3   <- 2.5
+}   
+
+
+# --CCB DEATH DATA ------------------------------------------------
+
+
+   
+ccbData     <- readRDS(paste0(myPlace,"/Data/CCB/datCounty.RDS")) %>%
+  filter(                                       Level %in% c("lev2") )
+#   filter(!(CAUSE %in% c("A02","D04","E03") ) & Level %in% c("lev2","lev3") )
 
 
 causeNames  <- read_csv("Info/causeNames.csv")  %>%
@@ -76,6 +96,15 @@ cidData     <- filter(cidData,Year==myYear) %>%
                         measure=Cases,
                         mValues = Disease)
 
+# -- HOSPITALZATION DATA DATA -----------------------------------------------
+
+hospData <- read_csv(paste0(myPlace,"/Data/OSHPD/Hospital_Discharge_CCS_grouping_2016.csv"))  %>%
+                       mutate(county = countyName,
+                       measure=nHosp,
+                       mValues = ccsName)
+  
+
+
 # -- IMHE DATA -----------------------------------------------
 
 myLevel <- c(2,3)
@@ -108,7 +137,7 @@ dat.DALY.risk <- dataIHME %>%  filter(measure_id ==  2,    #YLD
 
 countyList  <- sort(as.character(unique(ccbData$county)))
 
-SHOW_TOP <- 5  #15
+
 BAR_WIDTH <-  0.9
 PLOT_WIDTH_MULTIPLIER <- 1.0
 
@@ -116,20 +145,27 @@ plot_title <- c("Deaths",
                 "Years of Life Lost",
                 "Increase in Deaths",
                 "Race Disparity in Deaths",
+                "Number of Hospitalizations",
                 "Reportable Disease Cases",
+<<<<<<< HEAD
                 "Years Lived with Disability",
                 "Risk Factors")
+=======
+                "Years Lived with Disability (State Only)",
+                "Risk Factors (State Only)")
+>>>>>>> c99f0b483ba4aa22315e0e9f8448edb770360d25
 
 metric <-     c("Number",
                 "Rate",
                 "Percent",
                 "Rate Ratio",
                 "Number",
+                "Number",
                 "Rate",
                 "Rate")
 
-dataSets   <- list(ccbDeaths, ccbYLL,ccbChange, ccbRace,cidData, dat.YLD.cause,dat.DALY.risk)
-ourColors <-    c("#8F98B5", "#E9A291", "#E9A291","#8ECAE3", "#E6C8A0","#8F98B5","#E9A291")
+dataSets   <- list(ccbDeaths, ccbYLL,ccbChange, ccbRace,hospData,cidData, dat.YLD.cause,dat.DALY.risk)
+ourColors <-    c("#8F98B5", "#E9A291", "#E9A291","#8ECAE3", "#E6C8A0","#8F98B5","#E9A291","#8F98B5")
 
 
 
@@ -146,20 +182,11 @@ a3 <- hcl(hue, 35, 85)
 
 #barplot(seq_along(a), col=a3, main="Pastel_hcl")
 
-ourColors <- a3[c(5,6,7,8,9,11,12)]
+ourColors <- a3[c(5,6,7,8,9,11,12,15)]
 
-
-
-# THIS approach does not work for now
-# measures <- c("Ndeaths","junk")
-# mNames   <- c("causeName")
-# mutate(rankX = rank(-measures[IDnum])) %>%
-  
-  
 # --APP Plot Function-----------------------------------------------
 
 
-#plotMeasures <- function(myDataSet, IDnum, myCounty = "Los Angeles"){ 
 plotMeasures <- function(IDnum, myCounty = "Los Angeles"){ 
     
   if (1==2) {
@@ -168,8 +195,8 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles"){
     myCounty <- "Humboldt"
   }
      
-   if(IDnum %in% 1:5)  work.dat  <- filter(dataSets[[IDnum]],county==myCounty)
-   if(IDnum %in% 6:7)  work.dat  <-        dataSets[[IDnum]]                 
+   if(IDnum %in% 1:6)  work.dat  <- filter(dataSets[[IDnum]],county==myCounty)
+   if(IDnum %in% 7:8)  work.dat  <-        dataSets[[IDnum]]                 
    
    
   test <- data.frame(xrow=1:SHOW_TOP)
@@ -182,9 +209,9 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles"){
               mutate(xrow = row_number()  ) %>%
               full_join(test,by="xrow")    %>%
               mutate(xValues = ifelse(is.na(mValues),xrow,paste(xrow,mValues)))  %>%
-              mutate(xSize1 =ifelse(is.na(mValues),0.01,8),   #5
-                     xSize2 =ifelse(is.na(mValues),0.01,5),   #3
-                     xSize3 =ifelse(is.na(mValues),0.01,5),   #2.5
+              mutate(xSize1 =ifelse(is.na(mValues),0.01,tSize1),   #5
+                     xSize2 =ifelse(is.na(mValues),0.01,tSize2),   #3
+                     xSize3 =ifelse(is.na(mValues),0.01,tSize3),   #2.5
                      )  %>%
               mutate(measure=ifelse(is.na(mValues),0,measure))  %>%
      
