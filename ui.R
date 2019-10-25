@@ -51,6 +51,7 @@ shinyUI(fluidPage(
         column(6, plotOutput("RISK1"))  
     ),
     
+############## Bottom Text ################
     fluidRow(
         column(12,div(style="height:50px;"))
     ),

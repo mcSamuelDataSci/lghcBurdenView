@@ -264,6 +264,10 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles"){
 # --APP General Text ------------------------------------------------------
 #tooltips and popovers  https://rdrr.io/cran/shinyBS/man/Tooltips_and_Popovers.html
 
+lblwrap <- function (x,L) { # x=object, L=desired character length
+  sapply(lapply(x, strwrap, L),paste, collapse = "\n")
+}
+
 AppText<-function(Tbl=Datasources,TblRw=1) {list(
   HTML(paste(Tbl[TblRw,1],Tbl[TblRw,2],Tbl[TblRw,3],tagList(a(Tbl[TblRw,4],href=Tbl[TblRw,5],target="_blank")) )),
   if(Tbl[TblRw,6]!=""){
