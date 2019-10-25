@@ -118,7 +118,7 @@ plot_title <- c("Deaths",
                 "Race Disparity in Deaths",
                 "Reportable Disease Cases",
                 "Years Lived with Disability",
-                "Risk Factors (State Only)")
+                "Risk Factors")
 
 metric <-     c("Number",
                 "Rate",
@@ -241,6 +241,11 @@ tPlot
 
 # --APP General Text ------------------------------------------------------
 #tooltips and popovers https://rdrr.io/cran/shinyBS/man/Tooltips_and_Popovers.html
+
+
+lblwrap <- function (x,L) { # x=object, L=desired character length
+  sapply(lapply(x, strwrap, L),paste, collapse = "\n")
+}
 
 AppText<-function(Tbl=Datasources,TblRw=1) {list(
   HTML(paste(Tbl[TblRw,1],Tbl[TblRw,2],Tbl[TblRw,3],tagList(a(Tbl[TblRw,4],href=Tbl[TblRw,5],target="_blank")) )),
