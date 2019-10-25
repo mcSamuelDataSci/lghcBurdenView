@@ -1,7 +1,7 @@
 
 shinyServer(function(input, output,session) {
   
-
+  
   output$DEATHS1     <- renderPlot({plotMeasures(IDnum=1,input$myCounty)})
   output$YLL1        <- renderPlot({plotMeasures(IDnum=2,input$myCounty)})
   output$CHANGE1     <- renderPlot({plotMeasures(IDnum=3,input$myCounty)})
@@ -9,7 +9,7 @@ shinyServer(function(input, output,session) {
   
   output$HOSP1        <- renderPlot({plotMeasures(IDnum=5,input$myCounty)})
   output$CASES1      <- renderPlot({plotMeasures(IDnum=6,input$myCounty)})
-
+  
   output$YLD1        <- renderPlot({plotMeasures(IDnum=7,input$myCounty)})
   output$RISK1       <- renderPlot({plotMeasures(IDnum=8,input$myCounty)})
   
