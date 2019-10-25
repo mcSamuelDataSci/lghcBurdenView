@@ -262,7 +262,7 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles"){
 # plotMeasures(3, myCounty = "Contra Costa") 
 
 # --APP General Text ------------------------------------------------------
-#tooltips and popovers https://rdrr.io/cran/shinyBS/man/Tooltips_and_Popovers.html
+#tooltips and popovers  https://rdrr.io/cran/shinyBS/man/Tooltips_and_Popovers.html
 
 AppText<-function(Tbl=Datasources,TblRw=1) {list(
   HTML(paste(Tbl[TblRw,1],Tbl[TblRw,2],Tbl[TblRw,3],tagList(a(Tbl[TblRw,4],href=Tbl[TblRw,5],target="_blank")) )),
