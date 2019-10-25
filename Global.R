@@ -147,8 +147,8 @@ plot_title <- c("Deaths",
                 "Race Disparity in Deaths",
                 "Number of Hospitalizations",
                 "Reportable Disease Cases",
-                "Years Lived with Disability (State Only)",
-                "Risk Factors (State Only)")
+                "Years Lived with Disability",
+                "Risk Factors")
 
 metric <-     c("Number",
                 "Rate",
