@@ -8,6 +8,7 @@ library(magrittr)
 library(tidyr)
 library(plotly)
 library(shinyjs)
+library(officer) # writing document
 
 myPlace <- getwd()
 
@@ -277,3 +278,49 @@ AppText<-function(Tbl=Datasources,TblRw=1) {list(
 
 DataSourceText  <- read.csv(paste0(myPlace,"/Info/DataSourceText.csv"), colClasses = "character",na.strings = "NA")
 SummaryText     <- read.csv(paste0(myPlace,"/Info/SummaryText.csv"),    colClasses = "character",na.strings = "NA")
+
+
+# --Download ---------------------------
+#https://cran.r-project.org/web/packages/officer/officer.pdf
+#https://davidgohel.github.io/officer/articles/word.html
+#https://davidgohel.github.io/officer/reference/index.html#section-replace-content-in-word-documents
+#https://rmarkdown.rstudio.com/articles_docx.html
+#https://cran.r-project.org/web/packages/officer/vignettes/word.html
+
+
+my_doc <- read_docx(paste0(getwd(),"/County_Snapshot_Report.docx")) 
+styles_info(my_doc)
+
+src <- tempfile(fileext = ".png")
+png(filename = src, width = 5, height = 6, units = 'in', res = 300)
+plotMeasures(IDnum=1,"California")
+#barplot(1:10, col = 1:10)
+dev.off() #turns off display of objects after generation
+
+
+#"Aenean venenatis varius elit et fermentum vivamus vehicula." %>% rep(5) %>% paste(collapse = "")
+#Summary_doc <- function (Title1,Figure1) {#,Title2,Figure2,Title3,Figure3,Title4,Figure4,SummaryText1) {
+  my_doc <- read_docx(paste0(getwd(),"/Sample Portrait Template.docx"))  %>%
+#page 1  
+  body_add_par("Cause of Death, State", style = "Balloon Text") %>%
+  body_end_section_continuous() %>% 
+  # Chart 1
+  body_add_img(src = src, width = 3, height = 2 , style = "Normal") %>%
+  body_add_par(value = "Death", style = "Normal") #}
+#%>% 
+#  # Chart 2
+#  body_add_img(src = Figure2, width = 3, height = 2 , style = "Normal") %>%
+#  body_add_par(value = Title2, style = "Normal") %>% 
+#  # Chart 3
+#  body_add_img(src = Figure3, width = 3, height = 2 , style = "Normal") %>%
+#  slip_in_column_break() %>% # adds column break in BEFORE ABOVE line
+#  body_add_par(value = Title3, style = "Normal") %>%
+#  # Chart 4
+#  body_add_img(src = Figure4, width = 3, height = 2 , style = "Normal") %>%
+#  body_add_par(value = Title4, style = "Normal") %>% 
+#  # Summary Text 1
+#  body_end_section_columns(widths = c(3,3), sep = F, space = 0.5) %>%
+#  body_add_par(value = SummaryText1, style = "Normal")
+# }
+#page 2
+

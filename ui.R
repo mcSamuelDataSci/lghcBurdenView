@@ -2,9 +2,16 @@
 #https://shiny.rstudio.com/reference/shiny/0.14/fillPage.html
 #https://stackoverflow.com/questions/17838709/scale-and-size-of-plot-in-rstudio-shiny
 
+
 shinyUI(fluidPage(
     useShinyjs(),
-    hr(),
+    # tags$style(HTML("
+    # .tabbable > .nav > li > a                  {background-color: white;  color:black}
+    # .tabbable > .nav > li > a[data-value='t1'] {background-color: red;   color:white}
+    # .tabbable > .nav > li > a[data-value='t2'] {background-color: blue;  color:white}
+    # .tabbable > .nav > li > a[data-value='t3'] {background-color: green; color:white}
+    # .tabbable > .nav > li[class=active]    > a {background-color: black; color:white}
+    #                 ")),
     tabsetPanel(
         type = "tab",
         tabPanel("Cause of Death",
@@ -13,7 +20,7 @@ shinyUI(fluidPage(
                  fluidRow(column(6,selectInput("myCounty",NULL,choices = list("Select a county" = countyList),
                                                selected = "CALIFORNIA",selectize = F)),
                           column(3),
-                          column(3, downloadButton("report", "Download Report"))
+                          column(3, downloadButton("downloadData", "Download Report"))
                  ),
                  fluidRow(#column(4, plotOutput("DEATHS1"),offset = 2 ),
                      column(6, id = "deathTest", plotOutput("DEATHS1")),
