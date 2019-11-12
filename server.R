@@ -49,7 +49,17 @@ shinyServer(function(input, output,session) {
   output$downloadData <- downloadHandler(
     filename = function() {paste0("County_Snapshot_Report_",Sys.Date(),".docx")},
     content = function(file){
-      print(my_doc,target=file)
+      #Summary_doc(pngplot(  renderPlot({plotMeasures(IDnum=1,input$myCounty)})  ))
+      #print(my_doc,target=file)
+      tempReport <- file.path(getwd(), "tosee/cntyReport.Rmd")
+      file.copy("cntyReport.Rmd", tempReport, overwrite = TRUE)
+      #params <- list(c = input$myCounty)
+      render(tempReport,
+                        word_document(reference_docx = "Sample Portrait Template.docx"),
+                        output_file = file,
+                        #params = params,
+                        envir = new.env(parent = globalenv())
+      )
       }
     )
   }

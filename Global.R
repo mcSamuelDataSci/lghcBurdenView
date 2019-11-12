@@ -1,5 +1,6 @@
 library(dplyr)
 #library(fs)
+library(rmarkdown)
 library(readr)
 library(ggplot2)
 library(shiny)
@@ -9,6 +10,11 @@ library(tidyr)
 library(plotly)
 library(shinyjs)
 library(officer) # writing document
+
+clean_tmpfiles_mod <- function() {
+  message("Calling clean_tempfiles_mod()")
+}
+assignInNamespace("clean_tmpfiles",clean_tmpfiles_mod,ns = "rmarkdown")
 
 myPlace <- getwd()
 
@@ -288,25 +294,26 @@ SummaryText     <- read.csv(paste0(myPlace,"/Info/SummaryText.csv"),    colClass
 #https://cran.r-project.org/web/packages/officer/vignettes/word.html
 
 
-my_doc <- read_docx(paste0(getwd(),"/County_Snapshot_Report.docx")) 
-styles_info(my_doc)
-
+#pngplot <- function (plot1) {
 src <- tempfile(fileext = ".png")
 png(filename = src, width = 5, height = 6, units = 'in', res = 300)
-plotMeasures(IDnum=1,"California")
+png(filename = paste0(getwd(),"/Tosee.png"), width = 5, height = 6, units = 'in', res = 300)
+renderPlot({plotMeasures(IDnum=1)})
 #barplot(1:10, col = 1:10)
 dev.off() #turns off display of objects after generation
+#}
 
 
-#"Aenean venenatis varius elit et fermentum vivamus vehicula." %>% rep(5) %>% paste(collapse = "")
-#Summary_doc <- function (Title1,Figure1) {#,Title2,Figure2,Title3,Figure3,Title4,Figure4,SummaryText1) {
+Summary_doc <- function (Figure1) {#,Title2,Figure2,Title3,Figure3,Title4,Figure4,SummaryText1) {
   my_doc <- read_docx(paste0(getwd(),"/Sample Portrait Template.docx"))  %>%
+  # styles_info(my_doc)
 #page 1  
   body_add_par("Cause of Death, State", style = "Balloon Text") %>%
   body_end_section_continuous() %>% 
   # Chart 1
-  body_add_img(src = src, width = 3, height = 2 , style = "Normal") %>%
+  body_add_img(src = Figure1, width = 3, height = 2 , style = "Normal") %>%
   body_add_par(value = "Death", style = "Normal") #}
+  my_doc
 #%>% 
 #  # Chart 2
 #  body_add_img(src = Figure2, width = 3, height = 2 , style = "Normal") %>%
@@ -321,6 +328,5 @@ dev.off() #turns off display of objects after generation
 #  # Summary Text 1
 #  body_end_section_columns(widths = c(3,3), sep = F, space = 0.5) %>%
 #  body_add_par(value = SummaryText1, style = "Normal")
-# }
-#page 2
+}
 
