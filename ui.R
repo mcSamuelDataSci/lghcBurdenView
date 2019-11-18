@@ -12,16 +12,17 @@ shinyUI(fluidPage(
     # .tabbable > .nav > li > a[data-value='t3'] {background-color: green; color:white}
     # .tabbable > .nav > li[class=active]    > a {background-color: black; color:white}
     #                 ")),
-    tabsetPanel(
-        type = "tab",
-        tabPanel("Cause of Death",
-                 #htmlOutput("mainTitle"),
-                 hr(),
-                 fluidRow(column(6,selectInput("myCounty",NULL,choices = list("Select a county" = countyList),
+    hr(),
+    fluidRow(column(6,selectInput("myCounty",NULL,choices = list("Select a county" = countyList),
                                                selected = "CALIFORNIA",selectize = F)),
                           column(3),
                           column(3, downloadButton("downloadData", "Download Report"))
                  ),
+    tabsetPanel(
+        type = "tab",
+        tabPanel("Cause of Death",
+                 #htmlOutput("mainTitle"),
+                 #hr(),
                  fluidRow(#column(4, plotOutput("DEATHS1"),offset = 2 ),
                      column(6, id = "deathTest", plotOutput("DEATHS1")),
                      column(6, plotOutput("YLL1"))),
@@ -31,12 +32,7 @@ shinyUI(fluidPage(
         ),
         tabPanel("Non-fatal Measures",
                  # htmlOutput("mainTitle"),
-                 hr(),
-                 # fluidRow(
-                 #     column(6,selectInput("myCounty", NULL, choices=list("Select a county"=countyList), selected = "CALIFORNIA", selectize=F )),
-                 #     column(3),
-                 #     column(3,downloadButton("report", "Download Report"))
-                 #     ),
+                 #hr(),
                  fluidRow(column(6, plotOutput("CASES1")),
                           column(6, plotOutput("HOSP1")) ),
                  hr()

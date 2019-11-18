@@ -1,6 +1,6 @@
 library(dplyr)
 #library(fs)
-library(rmarkdown)
+#library(rmarkdown) # render document
 library(readr)
 library(ggplot2)
 library(shiny)
@@ -26,23 +26,23 @@ myYear    <-  2017
 mySex     <-  "Total"
 #myLev     <-  "lev2"
 
-
-dMode <- "display"
-#dMode <- "study"
-
-if (dMode == "display") {
-  SHOW_TOP <- 5  
-  tSize1   <- 8
-  tSize2   <- 5
-  tSize3   <- 5
-}
-
-if (dMode == "study") {
-  SHOW_TOP <- 15
-  tSize1   <- 5
-  tSize2   <- 3
-  tSize3   <- 2.5
-}   
+# display mode moved to plot measures function for download button option
+# dMode <- "display"
+# #dMode <- "study"
+# 
+# if (dMode == "display") {
+#   SHOW_TOP <- 5  
+#   tSize1   <- 8
+#   tSize2   <- 5
+#   tSize3   <- 5
+# }
+# 
+# if (dMode == "study") {
+#   SHOW_TOP <- 15
+#   tSize1   <- 5
+#   tSize2   <- 3
+#   tSize3   <- 2.5
+# }   
 
 
 # --CCB DEATH DATA ------------------------------------------------
@@ -103,7 +103,7 @@ cidData     <- filter(cidData,Year==myYear) %>%
          measure=Cases,
          mValues = Disease)
 
-# -- HOSPITALZATION DATA DATA -----------------------------------------------
+# -- HOSPITALZATION DATA -----------------------------------------------
 
 hospData <- read_csv(paste0(myPlace,"/Data/OSHPD/Hospital_Discharge_CCS_grouping_2016.csv"))  %>%
   mutate(county = countyName,
@@ -189,7 +189,22 @@ ourColors <- a3[c(5,6,7,8,9,11,12,15)]
 # --APP Plot Function-----------------------------------------------
 
 
-plotMeasures <- function(IDnum, myCounty = "Los Angeles"){ 
+plotMeasures <- function(IDnum, myCounty = "Los Angeles",dMode = "display"){ 
+  
+  if (dMode == "display") {
+    SHOW_TOP <- 5  
+    tSize1   <- 8
+    tSize2   <- 5
+    tSize3   <- 5
+  }
+  
+  if (dMode == "study") {
+    SHOW_TOP <- 15
+    tSize1   <- 5
+    tSize2   <- 3
+    tSize3   <- 2.5
+  }
+  
   
   if (1==2) {
     myDataSet <- cidData
@@ -265,68 +280,85 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles"){
   
 }
 
+plotMeasures(3, myCounty = "Contra Costa")
+#p<-plotMeasures(1, myCounty = "Contra Costa","study")
+#q<-plotMeasures(3, myCounty = "Contra Costa","study")
+#grid.arrange(grobs = list(p,q),nrow=1,widths =c(5,0.1,5), layout_matrix = rbind(c(1,NA,2)) )
 
-# plotMeasures(3, myCounty = "Contra Costa") 
 
 # --APP General Text ------------------------------------------------------
 #tooltips and popovers  https://rdrr.io/cran/shinyBS/man/Tooltips_and_Popovers.html
 
-lblwrap <- function (x,L) { # x=object, L=desired character length
-  sapply(lapply(x, strwrap, L),paste, collapse = "\n")
-}
-
+# lblwrap <- function (x,L) { # x=object, L=desired character length
+#   sapply(lapply(x, strwrap, L),paste, collapse = "\n")
+# }
+ 
 AppText<-function(Tbl=Datasources,TblRw=1) {list(
   HTML(paste(Tbl[TblRw,1],Tbl[TblRw,2],Tbl[TblRw,3],tagList(a(Tbl[TblRw,4],href=Tbl[TblRw,5],target="_blank")) )),
   if(Tbl[TblRw,6]!=""){
     tags$span(tipify(bsButton(paste0("pB",deparse(substitute(Tbl)),TblRw),Tbl[TblRw,6],size="extra-small"),Tbl[TblRw,7],placement = "top"))
   }
 )}
-
-DataSourceText  <- read.csv(paste0(myPlace,"/Info/DataSourceText.csv"), colClasses = "character",na.strings = "NA")
-SummaryText     <- read.csv(paste0(myPlace,"/Info/SummaryText.csv"),    colClasses = "character",na.strings = "NA")
+ 
+# DataSourceText  <- read.csv(paste0(myPlace,"/Info/DataSourceText.csv"), colClasses = "character",na.strings = "NA")
+ SummaryText     <- read.csv(paste0(myPlace,"/Info/SummaryText.csv"),    colClasses = "character",na.strings = "NA")
 
 
 # --Download ---------------------------
 #https://cran.r-project.org/web/packages/officer/officer.pdf
-#https://davidgohel.github.io/officer/articles/word.html
 #https://davidgohel.github.io/officer/reference/index.html#section-replace-content-in-word-documents
-#https://rmarkdown.rstudio.com/articles_docx.html
-#https://cran.r-project.org/web/packages/officer/vignettes/word.html
 
+#stylesdoc<-read_docx(paste0(getwd(),"/County_Snapshot_Report.docx"))  
+#styles_info(stylesdoc) #can be modified in word document template. Must keep name.
 
-#pngplot <- function (plot1) {
-src <- tempfile(fileext = ".png")
-png(filename = src, width = 5, height = 6, units = 'in', res = 300)
-png(filename = paste0(getwd(),"/Tosee.png"), width = 5, height = 6, units = 'in', res = 300)
-renderPlot({plotMeasures(IDnum=1)})
-#barplot(1:10, col = 1:10)
-dev.off() #turns off display of objects after generation
-#}
-
-
-Summary_doc <- function (Figure1) {#,Title2,Figure2,Title3,Figure3,Title4,Figure4,SummaryText1) {
-  my_doc <- read_docx(paste0(getwd(),"/Sample Portrait Template.docx"))  %>%
+Summary_doc <- function (Title,Figure1,Figure2,Figure3,Figure4,Figure5,Figure6,Figure7,Figure8) {
+  read_docx(paste0(getwd(),"/County_Snapshot_Report.docx"))  %>%
   # styles_info(my_doc)
-#page 1  
-  body_add_par("Cause of Death, State", style = "Balloon Text") %>%
-  body_end_section_continuous() %>% 
-  # Chart 1
-  body_add_img(src = Figure1, width = 3, height = 2 , style = "Normal") %>%
-  body_add_par(value = "Death", style = "Normal") #}
-  my_doc
-#%>% 
-#  # Chart 2
-#  body_add_img(src = Figure2, width = 3, height = 2 , style = "Normal") %>%
-#  body_add_par(value = Title2, style = "Normal") %>% 
-#  # Chart 3
-#  body_add_img(src = Figure3, width = 3, height = 2 , style = "Normal") %>%
-#  slip_in_column_break() %>% # adds column break in BEFORE ABOVE line
-#  body_add_par(value = Title3, style = "Normal") %>%
-#  # Chart 4
-#  body_add_img(src = Figure4, width = 3, height = 2 , style = "Normal") %>%
-#  body_add_par(value = Title4, style = "Normal") %>% 
-#  # Summary Text 1
-#  body_end_section_columns(widths = c(3,3), sep = F, space = 0.5) %>%
-#  body_add_par(value = SummaryText1, style = "Normal")
-}
+  
+# page 1  
+    cursor_reach("WordTitle1") %>%
+  body_add_par(value = paste0(toupper(Title)," CAUSE OF DEATH MEASURES"), style = "heading 1", pos="on") %>%
+    cursor_reach("WordFigure1") %>%
+  body_add_img(src = Figure1, width = 3.2, height = 2.2 , style = "Normal", pos="on") %>%
+    cursor_reach("WordFigure2") %>%
+  body_add_img(src = Figure2, width = 3.2, height = 2.2 , style = "Normal", pos="on") %>%
+    cursor_reach("WordFigure3") %>%
+  body_add_img(src = Figure3, width = 3.2, height = 2.2 , style = "Normal", pos="on") %>%
+    cursor_reach("WordFigure4") %>%
+  body_add_img(src = Figure4, width = 3.2, height = 2.2 , style = "Normal", pos="on") %>%
+    cursor_reach("WordTitle2") %>%
+  body_add_par(value = paste0(toupper(Title)," NON-FATAL MEASURES"), style = "heading 1", pos="on") %>%
+    cursor_reach("WordFigure5") %>%
+  body_add_img(src = Figure5, width = 3.2, height = 2.2 , style = "Normal", pos="on") %>%
+    cursor_reach("WordFigure6") %>%
+  body_add_img(src = Figure6, width = 3.2, height = 2.2 , style = "Normal", pos="on") %>%
+# page 2
+    cursor_reach("WordTitle3") %>%
+  body_add_par(value = "STATE MEASURES", style = "heading 1", pos="on") %>%
+    cursor_reach("WordFigure7") %>%
+  body_add_img(src = Figure7, width = 3.2, height = 2.2 , style = "Normal", pos="on") %>%
+    cursor_reach("WordFigure8") %>%
+  body_add_img(src = Figure8, width = 3.2, height = 2.2 , style = "Normal", pos="on") %>%
+    cursor_reach("WordSummary1") %>%
+  #text (temporary) %>%
+  body_add_par(value = paste0(toupper(SummaryText$GeneralText[1])), style="heading 1",pos="on") %>%
+    cursor_reach("WordSummaryText1") %>%
+  body_add_par(value = paste0(SummaryText$GeneralText[2]), style="heading 2",pos="on") %>%
+    body_add_par(value = paste0(SummaryText$GeneralText[3]), style="Compact") %>%
+  body_add_par(value = paste0(SummaryText$GeneralText[4]), style="heading 2") %>%
+    body_add_par(value = paste0(SummaryText$GeneralText[5]), style="Compact") %>%
+  body_add_par(value = paste0(SummaryText$GeneralText[6]), style="heading 2") %>%
+    body_add_par(value = paste0(SummaryText$GeneralText[7]), style="Compact") %>%
+  body_add_par(value = paste0(SummaryText$GeneralText[8]), style="heading 2") %>%
+    body_add_par(value = paste0(SummaryText$GeneralText[9],
+                                SummaryText$ButtonText[9],#SummaryText$HoverText[9],
+                                SummaryText$GeneralText[10]), style="Compact") %>%
+  body_add_par(value = paste0(SummaryText$GeneralText[11]), style="heading 2") %>%
+    body_add_par(value = paste0(SummaryText$GeneralText[12]), style="Compact") %>%
+  body_add_par(value = paste0(SummaryText$GeneralText[13]), style="heading 2") %>%
+    body_add_par(value = paste0(SummaryText$GeneralText[14]), style="Compact") %>%
+  body_add_par(value = paste0(SummaryText$GeneralText[15]), style="heading 2") %>%
+    body_add_par(value = paste0(SummaryText$GeneralText[16]), style="Compact")
+  }
 
+ 
