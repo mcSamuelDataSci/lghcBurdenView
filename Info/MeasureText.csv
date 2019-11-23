@@ -1,0 +1,19 @@
+GeneralText
+Public health looks across multiple measures to identify significant patterns and trends and public health challenges.
+Measures
+Number of Deaths
+Measures how many people died from a given condition.
+Greatest Percentage Increase in Deaths
+Measures the change in the death rate over time and shows which conditions are increasing most rapidly. The increase is measured here by showing the percentage increase in the age-adjusted death rate for the years specified in the visualization. “Age-adjusted” death rates are used to account for the impact of the changing age distribution of the California population on the measure.
+Premature Deaths (Years of Life Lost)
+"Years of Life Lost (YLL) emphasizes conditions that cause more deaths among younger people, so YLL is sometimes referred to as “premature deaths”. The number of years of life lost is calculated by summing the number of years before age 75 than each death occurs (with 0 for deaths occurring after age 75) Years of Life Lost are expressed here as rates per 100,000 population."
+Disparity Ratio
+"Measures the difference in the death rate between population groups for the same condition using data for the three most recent years combined. Here, the measure is based on the greatest differences between racial/ethnic groups. The measure compares the age-adjusted death rate in the group with the highest rate to the group with the lowest rate. A large ratio between the two rates indicates a large disparity."
+Number of Hospitalizations
+Need text from Michael here.
+Reportable Infectious Disease
+"Includes cases for conditions that are “reportable” to local public health departments in California. All communicable diseases are associated with some level of morbidity and mortality, and most cases are preventable with known public health control measures. For conditions which are not reportable to health departments, similar data are not available, so cannot be included in this chart. Other mechanisms are used to track these conditions, and for some there can be a very large numbers of cases (e.g. norovirus) and/or deaths (e.g. influenza), and are therefore also public health priorities."
+Years Lived with Disability
+"This measure is based on calculations and modeling done by the Institute for Health Metrics and Evaluation. Here disability refers to the burden of infirmity, affliction, or disadvantage associated with a disease or disorder. These models utilize assumptions and multiple data sources to produce reliable California-specific estimates of years lived with disability (expressed here as rate per 100,000 population, most recent year available)."
+Risk Factors
+"Estimates how much each behavior or exposure in the population contributes to “disability adjusted life years” (which is the sum of Years Lived with Disability and Years of Life Lost). This measure is based on complex modeling done by the Institute for Health Metrics and Evaluation. These models utilize assumptions and multiple data sources to produce reliable California-specific estimates (expressed here as rate per 100,000 population, most recent year available)."
