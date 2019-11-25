@@ -171,7 +171,7 @@ lblwrap <- function (x,L) { # x=object, L=desired character length
   sapply(lapply(x, strwrap, L),paste, collapse = "\n")
 }
 
-plotMeasures <- function(IDnum, myCounty = "Los Angeles",Observations = 10){ 
+plotMeasures <- function(IDnum, myCounty = "Los Angeles",myObserv = 10){ 
   
  #  if (dMode == "display") { 
  #    SHOW_TOP <- 5   
@@ -186,10 +186,10 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles",Observations = 10){
  #    tSize3   <- 2.5 
  #    }    
 
-    SHOW_TOP <- Observations  
-    tSize1   <- round((Observations/-10)+6.5,1)#round((Observations/-20)+4.75)
-    tSize2   <- 4#round((Observations/-12)+4.75)
-    tSize3   <- 3#round((Observations/-12.5)+4.75)
+    SHOW_TOP <- myObserv  
+    tSize1   <- round((myObserv/-10)+6.5,1)#round((myObserv/-20)+4.75)
+    tSize2   <- 4#round((myObserv/-12)+4.75)
+    tSize3   <- 3#round((myObserv/-12.5)+4.75)
 
   if (1==2) {
     myDataSet <- cidData
