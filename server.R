@@ -50,6 +50,9 @@ shinyServer(function(input, output,session) {
     content = function(file){
       
       flpath<-paste0(tempdir(),"/") #LIVE=tempdir TESTING=getwd
+      tempStyle <- file.path(tempdir(), "County_Snapshot_Report.docx")
+      file.copy("County_Snapshot_Report.docx", tempStyle, overwrite = TRUE)
+      
       h<-3.5
       ggsave(paste0(flpath,"1.png"), plot = plotMeasures(IDnum=1,myCounty = input$myCounty,input$myObserv),
              device = "png", width = 5, height = h, units = 'in')

@@ -300,7 +300,7 @@ AppText<-function(Tbl=Datasources,TblRw=1) {list(
 #styles_info(stylesdoc) #can be modified in word document template. Must keep name.
 
 Summary_doc <- function (Title,Figure1,Figure2,Figure3,Figure4,Figure5,Figure6,Figure7,Figure8) {
-  read_docx(paste0(getwd(),"/County_Snapshot_Report.docx"))  %>%
+  read_docx(paste0(tempdir(),"/County_Snapshot_Report.docx"))  %>%
 # page 1  
     cursor_reach("WordSummaryText1") %>%
   body_add_par(value = paste0(MeasureText$GeneralText[1]), style="Subtitle",pos="on") %>%
