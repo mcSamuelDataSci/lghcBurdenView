@@ -168,7 +168,7 @@ ourColors <- a3[c(5,6,7,8,9,11,12,15)]
 # --APP Plot Function-----------------------------------------------
 
 lblwrap <- function (x,L) { # x=object, L=desired character length
-  sapply(lapply(x, strwrap, L),paste, collapse = "\n")
+  sapply(lapply(x, strwrap, L),paste, collapse = "\n   ")
 }
 
 plotMeasures <- function(IDnum, myCounty = "Los Angeles",myObserv = 10){ 
