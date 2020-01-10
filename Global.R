@@ -187,9 +187,11 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles",myObserv = 10){
  #    }    
 
     SHOW_TOP <- myObserv  
-    tSize1   <- round((myObserv/-10)+6.5,1)#round((myObserv/-20)+4.75)
-    tSize2   <- 4#round((myObserv/-12)+4.75)
-    tSize3   <- 3#round((myObserv/-12.5)+4.75)
+    tSize1   <- round(((2e-07)*(myObserv^4))-((6e-05)*(myObserv^3))+
+                        0.007*(myObserv^2)-(0.3276*myObserv)+8.4091)
+    tSize2   <- round(((2e-07)*(myObserv^4))-((5e-05)*(myObserv^3))+
+                        0.0041*(myObserv^2)-(0.144*myObserv)+4.7105)#4
+    tSize3   <- 3
 
   if (1==2) {
     myDataSet <- cidData
