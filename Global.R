@@ -49,10 +49,11 @@ ccbYLL      <- ccb %>%
          mValues = causeName)
 
 
+
 ccbChange      <- filter(ccbData,year %in% c(2007,2017), sex==mySex) %>% 
   select(county,year,CAUSE,aRate) %>%
-  spread(key=year,value=aRate) 
-names(ccbChange)      <- c(names(ccbChange)[1:2],     paste0("rate",names(ccbChange)[3:4]))
+  pivot_wider(names_from = year, values_from = aRate, names_prefix="rate")
+
 ccbChange      <- ccbChange %>%
   mutate(change = round(100*(rate2017-rate2007)/rate2007,1)) %>%
   filter(CAUSE != "Z01" ) %>%  #   Symptoms, signs and ill-defined conditions, not elsewhere classified
@@ -64,12 +65,17 @@ ccbChange      <- ccbChange %>%
 
 # --CCB RACE DATA ---------------------------------------------------
 
+raceDisparityUnique   <- read_csv(paste0(myPlace,"/Data/CCB/raceDisparity.csv"))  %>%
+                            group_by(yearG3,county,CAUSE)   %>% 
+                            mutate(rankX=rank(-rateRatio))  %>% # ranks higher RR for each CONDITION in each County
+                            filter(rankX==1) %>% select(-rankX) %>%
+                            ungroup()
 
-ccbRace     <- read_csv(paste0(myPlace,"/Data/CCB/raceDisparity.csv")) %>%
-  mutate(causeName = ifelse(CAUSE=="Z01","Ill-Defined",causeName)) %>%
-  mutate(measure=round(rateRatio,1),
-         mValues = causeName)
-
+ccbRace <- raceDisparityUnique %>%
+             left_join(causeNames,by="CAUSE") %>%
+             mutate(causeName = ifelse(CAUSE=="Z01","Ill-Defined",causeName)) %>%
+             mutate(measure=round(rateRatio,1),
+             mValues = causeName)
 
 # -- CID DATA ------------------------------------------------
 
@@ -171,8 +177,16 @@ lblwrap <- function (x,L) { # x=object, L=desired character length
   sapply(lapply(x, strwrap, L),paste, collapse = "\n   ")
 }
 
-plotMeasures <- function(IDnum, myCounty = "Los Angeles",myObserv = 10){ 
+plotMeasures <- function(IDnum=4, myCounty = "Los Angeles",myObserv = 10){ 
   
+  
+ if(1==2){
+   IDnum=4
+   myCounty = "Butte"
+   myObserv = 10
+ }  
+  
+
  #  if (dMode == "display") { 
  #    SHOW_TOP <- 5   
  #    tSize1   <- 8 
@@ -193,11 +207,7 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles",myObserv = 10){
                         0.0041*(myObserv^2)-(0.144*myObserv)+4.7105)#4
     tSize3   <- 3
 
-  if (1==2) {
-    myDataSet <- cidData
-    IDnum <- 5
-    myCounty <- "Humboldt"
-  }
+  
   
   if(IDnum %in% 1:6)  work.dat  <- filter(dataSets[[IDnum]],county==myCounty)
   if(IDnum %in% 7:8)  work.dat  <-        dataSets[[IDnum]]                 
@@ -205,9 +215,9 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles",myObserv = 10){
   
   test <- data.frame(xrow=1:SHOW_TOP)
   
-  
+
   work.dat <- work.dat %>%
-    mutate(rankX = rank(-measure)) %>%
+    mutate(rankX = rank(-measure))   %>%
     filter(rankX <= SHOW_TOP)   %>%
     arrange(rankX) %>%
     mutate(xrow = row_number()  ) %>%
@@ -218,7 +228,6 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles",myObserv = 10){
            xSize3 =ifelse(is.na(mValues),0.01,tSize3),   #2.5
     )  %>%
     mutate(measure=ifelse(is.na(mValues),0,measure))  %>%
-    
     arrange(xrow)
   
   
@@ -228,16 +237,14 @@ plotMeasures <- function(IDnum, myCounty = "Los Angeles",myObserv = 10){
   if (IDnum == 4) myYear <- "2016-2018"
   if (IDnum == 3) myYear <- "2007 to 2017"
   
-  
-  
-  
   plot_width <- max(work.dat$measure)*PLOT_WIDTH_MULTIPLIER
   
   
+ 
   tPlot <-  
     ggplot(data=work.dat, aes(x=reorder(xValues, -xrow),y=measure)) +
     coord_flip() +
-    geom_bar(position="dodge", stat="identity", width=BAR_WIDTH, fill=ourColors[IDnum]) +
+    geom_bar(position="dodge", stat="identity", width=BAR_WIDTH, fill=ourColors[IDnum])   +
     geom_text(hjust=0, y=0, label=lblwrap(paste0(work.dat$xValues),ifelse(SHOW_TOP<13,38,48) ),
               size=work.dat$xSize1, lineheight = 0.7) +  # , size=xSize
     annotate(geom="text", hjust=1, x=work.dat$xValues, y=plot_width, label=work.dat$measure,size=work.dat$xSize2) +
