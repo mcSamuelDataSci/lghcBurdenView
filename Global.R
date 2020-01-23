@@ -65,17 +65,11 @@ ccbChange      <- ccbChange %>%
 
 # --CCB RACE DATA ---------------------------------------------------
 
-raceDisparityUnique   <- read_csv(paste0(myPlace,"/Data/CCB/raceDisparity.csv"))  %>%
-                            group_by(yearG3,county,CAUSE)   %>% 
-                            mutate(rankX=rank(-rateRatio))  %>% # ranks higher RR for each CONDITION in each County
-                            filter(rankX==1) %>% select(-rankX) %>%
-                            ungroup()
 
-ccbRace <- raceDisparityUnique %>%
-             left_join(causeNames,by="CAUSE") %>%
-             mutate(causeName = ifelse(CAUSE=="Z01","Ill-Defined",causeName)) %>%
-             mutate(measure=round(rateRatio,1),
-             mValues = causeName)
+ccbRace <-  readRDS(paste0(myPlace,"/Data/CCB/ccbRaceDisparity.RDS"))   %>%
+                  mutate(measure=round(rateRatio,1),
+                  mValues = causeName)
+
 
 # -- CID DATA ------------------------------------------------
 
