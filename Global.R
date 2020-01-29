@@ -173,6 +173,7 @@ lblwrap <- function (x,L) { # x=object, L=desired character length
 
 plotMeasures <- function(IDnum=4, myCounty = "Los Angeles",myObserv = 10){ 
   
+  myObserv=as.numeric(myObserv)
   
  if(1==2){
    IDnum=4
