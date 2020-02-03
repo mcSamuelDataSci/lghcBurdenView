@@ -6,8 +6,8 @@ shinyServer(function(input, output,session) {
   output$CHANGE1     <- renderPlot({plotMeasures(IDnum=3,input$myCounty,input$myObserv)})
   output$DISPARITY1  <- renderPlot({plotMeasures(IDnum=4,input$myCounty,input$myObserv)})
   
-  output$HOSP1       <- renderPlot({plotMeasures(IDnum=5,input$myCounty,input$myObserv)})
   output$CASES1      <- renderPlot({plotMeasures(IDnum=6,input$myCounty,input$myObserv)})
+  output$HOSP1       <- renderPlot({plotMeasures(IDnum=5,input$myCounty,input$myObserv)})
   
   output$YLD1        <- renderPlot({plotMeasures(IDnum=7,input$myCounty,input$myObserv)})
   output$RISK1       <- renderPlot({plotMeasures(IDnum=8,input$myCounty,input$myObserv)})
@@ -53,23 +53,25 @@ shinyServer(function(input, output,session) {
       tempStyle <- file.path(tempdir(), "County_Snapshot_Report.docx")
       file.copy("County_Snapshot_Report.docx", tempStyle, overwrite = TRUE)
       
+      #Height and Width of plot (text and spacing) scaled to download document dimensions. Landscape#Portait
       h<-3.5
+      w<-6.7#5
       ggsave(paste0(flpath,"1.png"), plot = plotMeasures(IDnum=1,myCounty = input$myCounty,input$myObserv),
-             device = "png", width = 5, height = h, units = 'in')
+             device = "png", width = w, height = h, units = 'in')
       ggsave(paste0(flpath,"2.png"), plot = plotMeasures(IDnum=2,myCounty = input$myCounty,input$myObserv),
-             device = "png", width = 5, height = h, units = 'in')
+             device = "png", width = w, height = h, units = 'in')
       ggsave(paste0(flpath,"3.png"), plot = plotMeasures(IDnum=3,myCounty = input$myCounty,input$myObserv),
-            device = "png", width = 5, height = h, units = 'in')
+             device = "png", width = w, height = h, units = 'in')
       ggsave(paste0(flpath,"4.png"), plot = plotMeasures(IDnum=4,myCounty = input$myCounty,input$myObserv),
-            device = "png", width = 5, height = h, units = 'in')
+             device = "png", width = w, height = h, units = 'in')
       ggsave(paste0(flpath,"5.png"), plot = plotMeasures(IDnum=5,myCounty = input$myCounty,input$myObserv),
-             device = "png", width = 5, height = h, units = 'in')
+             device = "png", width = w, height = h, units = 'in')
       ggsave(paste0(flpath,"6.png"), plot = plotMeasures(IDnum=6,myCounty = input$myCounty,input$myObserv),
-             device = "png", width = 5, height = h, units = 'in')
+             device = "png", width = w, height = h, units = 'in')
       ggsave(paste0(flpath,"7.png"), plot = plotMeasures(IDnum=7,myCounty = input$myCounty,input$myObserv),
-             device = "png", width = 5, height = h, units = 'in')
+             device = "png", width = w, height = h, units = 'in')
       ggsave(paste0(flpath,"8.png"), plot = plotMeasures(IDnum=8,myCounty = input$myCounty,input$myObserv),
-             device = "png", width = 5, height = h, units = 'in')
+             device = "png", width = w, height = h, units = 'in')
       Texttest<-list(
         AppText(SummaryText,1),
         AppText(SummaryText,2))

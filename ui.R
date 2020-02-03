@@ -15,29 +15,35 @@ shinyUI(fluidPage(
     hr(),
     fluidRow(column(3,selectInput("myCounty",NULL,choices = list("Select a county" = countyList),
                                   selected = "CALIFORNIA", selectize = F)),
-             column(3,radioButtons("myObserv","How Many",c(5,10,15),inline=TRUE)),
+             column(3,selectInput("myObserv",NULL,selected=10,c(5,10,15,20) )),
              column(3),
              column(3, downloadButton("downloadData", "Download Report"))
              ),
     tabsetPanel(
         type = "tab",
         tabPanel("Cause of Death",
-                 fluidRow(#column(4, plotOutput("DEATHS1"),offset = 2 ),
+                 fluidRow(
+                     tags$head(tags$style("#DEATHS1{height:40vh !important;}")),
+                     tags$head(tags$style("#YLL1{height:40vh !important;}")),
                      column(6, id = "deathTest", plotOutput("DEATHS1")),
                      column(6, plotOutput("YLL1"))),
-                 fluidRow(column(6, plotOutput("CHANGE1")),
-                          column(6, plotOutput("DISPARITY1")) ),
-                 hr()
-        ),
+                 fluidRow(
+                     tags$head(tags$style("#CHANGE1{height:40vh !important;}")),
+                     tags$head(tags$style("#DISPARITY1{height:40vh !important;}")),
+                     column(6, plotOutput("CHANGE1")),
+                     column(6, plotOutput("DISPARITY1")) )
+                 ),
         tabPanel("Non-fatal Measures",
+                 tags$head(tags$style("#CASES1{height:80vh !important;}")),
+                 tags$head(tags$style("#HOSP1{height:80vh !important;}")),
                  fluidRow(column(6, plotOutput("CASES1")),
-                          column(6, plotOutput("HOSP1")) ),
-                 hr()
-        ),
+                          column(6, plotOutput("HOSP1")) )
+                 ),
         tabPanel("State Measures",
+                 tags$head(tags$style("#YLD1{height:80vh !important;}")),
+                 tags$head(tags$style("#RISK1{height:80vh !important;}")),
                  fluidRow(column(6, plotOutput("YLD1")),
-                          column(6, plotOutput("RISK1")) ),
-                 hr()
+                          column(6, plotOutput("RISK1")) )
                  )
         )
 
