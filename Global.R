@@ -303,6 +303,10 @@ AppText<-function(Tbl=Datasources,TblRw=1) {list(
 #stylesdoc<-read_docx(paste0(getwd(),"/County_Snapshot_Report.docx"))  
 #styles_info(stylesdoc) #can be modified in word document template. Must keep name.
 
+#Height and width of images inserted in download document. Landscape #Portrait 
+hght<-2.4#2
+wdth<-4.5#3.2  
+ 
 Summary_doc <- function (Title,Figure1,Figure2,Figure3,Figure4,Figure5,Figure6,Figure7,Figure8) {
   read_docx(paste0(tempdir(),"/County_Snapshot_Report.docx"))  %>%
 # page 1  
@@ -311,26 +315,26 @@ Summary_doc <- function (Title,Figure1,Figure2,Figure3,Figure4,Figure5,Figure6,F
     cursor_reach("WordTitle1") %>%
   body_add_par(value = paste0(capwords(Title)," Cause of Death Measures"), style = "heading 1", pos="on") %>%
     cursor_reach("WordFigure1") %>%
-  body_add_img(src = Figure1, width = 3.2, height = 2 , style = "Normal", pos="on") %>%
+  body_add_img(src = Figure1, width = wdth, height = hght , style = "Normal", pos="on") %>%
     cursor_reach("WordFigure2") %>%
-  body_add_img(src = Figure2, width = 3.2, height = 2 , style = "Normal", pos="on") %>%
+  body_add_img(src = Figure2, width = wdth, height = hght , style = "Normal", pos="on") %>%
     cursor_reach("WordFigure3") %>%
-  body_add_img(src = Figure3, width = 3.2, height = 2 , style = "Normal", pos="on") %>%
+  body_add_img(src = Figure3, width = wdth, height = hght , style = "Normal", pos="on") %>%
     cursor_reach("WordFigure4") %>%
-  body_add_img(src = Figure4, width = 3.2, height = 2 , style = "Normal", pos="on") %>%
+  body_add_img(src = Figure4, width = wdth, height = hght , style = "Normal", pos="on") %>%
     cursor_reach("WordTitle2") %>%
   body_add_par(value = paste0(capwords(Title)," Quality of Life Measures"), style = "heading 1", pos="on") %>%
     cursor_reach("WordFigure5") %>%
-  body_add_img(src = Figure5, width = 3.2, height = 2 , style = "Normal", pos="on") %>%
+  body_add_img(src = Figure5, width = wdth, height = hght , style = "Normal", pos="on") %>%
     cursor_reach("WordFigure6") %>%
-  body_add_img(src = Figure6, width = 3.2, height = 2 , style = "Normal", pos="on") %>%
+  body_add_img(src = Figure6, width = wdth, height = hght , style = "Normal", pos="on") %>%
 # page 2
     cursor_reach("WordTitle3") %>%
   body_add_par(value = "State Quality of Life Measures", style = "heading 1", pos="on") %>%
     cursor_reach("WordFigure7") %>%
-  body_add_img(src = Figure7, width = 3.2, height = 2 , style = "Normal", pos="on") %>%
+  body_add_img(src = Figure7, width = wdth, height = hght , style = "Normal", pos="on") %>%
     cursor_reach("WordFigure8") %>%
-  body_add_img(src = Figure8, width = 3.2, height = 2 , style = "Normal", pos="on") %>%
+  body_add_img(src = Figure8, width = wdth, height = hght , style = "Normal", pos="on") %>%
   #text (temporary) %>%
     cursor_reach("WordSources1") %>%
   body_add_par(value = paste0(DataSourceText$GeneralText[1]), style="heading 1",pos="on") %>%
