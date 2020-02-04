@@ -15,7 +15,8 @@ shinyUI(fluidPage(
     hr(),
     fluidRow(column(3,selectInput("myCounty",NULL,choices = list("Select a county" = countyList),
                                   selected = "CALIFORNIA", selectize = F)),
-             column(3,selectInput("myObserv",NULL,selected=10,c(5,10,15,20) )),
+             column(3,selectInput("myObserv",NULL,choices = list("How many shown?" = c(5,10,15,20)), 
+                                  selected=10)),
              column(3),
              column(3, downloadButton("downloadData", "Download Report"))
              ),
