@@ -17,7 +17,8 @@ myPlace <- getwd()
 
 
 #myMeasure <-  "Ndeaths"
-myYear    <-  2017
+myYear    <-  2018
+cidYear   <- 2017
 mySex     <-  "Total"
 #myLev     <-  "lev2"
 
@@ -50,12 +51,12 @@ ccbYLL      <- ccb %>%
 
 
 
-ccbChange      <- filter(ccbData,year %in% c(2007,2017), sex==mySex) %>% 
+ccbChange      <- filter(ccbData,year %in% c(myYear-10,myYear), sex==mySex) %>% 
   select(county,year,CAUSE,aRate) %>%
   pivot_wider(names_from = year, values_from = aRate, names_prefix="rate")
 
 ccbChange      <- ccbChange %>%
-  mutate(change = round(100*(rate2017-rate2007)/rate2007,1)) %>%
+  mutate(change = round(100*(rate2018-rate2008)/rate2008,1)) %>%
   filter(CAUSE != "Z01" ) %>%  #   Symptoms, signs and ill-defined conditions, not elsewhere classified
   left_join(causeNames,by="CAUSE") %>%
   mutate(measure=change,
@@ -76,7 +77,7 @@ ccbRace <-  readRDS(paste0(myPlace,"/Data/CCB/ccbRaceDisparity.RDS"))   %>%
 
 cidData     <- read_csv(paste0(myPlace,"/Data/CID/dcdcData2017.csv")) 
 
-cidData     <- filter(cidData,Year==myYear) %>%
+cidData     <- filter(cidData,Year==cidYear) %>%
   mutate(county = County,
          measure=Cases,
          mValues = Disease)
