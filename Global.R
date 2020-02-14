@@ -96,15 +96,20 @@ hospData <- read_csv(paste0(myPlace,"/Data/OSHPD/Hospital_Discharge_CCS_grouping
 
 
 myLevel <- c(2,3)
+myLevel <- c(2)
 
 dataIHME     <- readRDS(paste0(myPlace,"/Data/IHME/v2IHME.RDS"))
+#risk     <- readRDS(paste0(myPlace,"/Data/IHME/risk-by-cause.RDS"))
 
-dat.YLD.cause <- dataIHME %>%  filter(measure_id ==  3,    #YLD  
+
+
+
+dat.YLD.cause <- dataIHME %>%  filter(measure_id ==  3,    #YLD
                                       year_id    == 2017,
                                       display    == "cause",
                                       level      %in% myLevel,
                                       sex_id     == 3,   # Both
-                                      metric_id  == 3)  %>%    # Rate 
+                                      metric_id  == 3)  %>%    # Rate
   mutate(measure = val,
          mValues = id_name)
 
