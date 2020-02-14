@@ -55,7 +55,8 @@ shinyServer(function(input, output,session) {
       
       #Height and Width of plot (text and spacing) scaled to download document dimensions. Landscape#Portait
       h<-3.5
-      w<-6.7#5
+      #w<-6.7  #landscape
+      w<-5    #portrait
       ggsave(paste0(flpath,"1.png"), plot = plotMeasures(IDnum=1,myCounty = input$myCounty,input$myObserv),
              device = "png", width = w, height = h, units = 'in')
       ggsave(paste0(flpath,"2.png"), plot = plotMeasures(IDnum=2,myCounty = input$myCounty,input$myObserv),
